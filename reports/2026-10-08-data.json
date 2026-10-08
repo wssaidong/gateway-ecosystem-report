@@ -1,0 +1,449 @@
+{
+  "meta": {
+    "date": "2026-10-08",
+    "window_days": 14
+  },
+  "apiseven_articles": [],
+  "apiseven_recent": [
+    {
+      "title": "API7 网关 3.10.7：弥合从客户端到上游的信任缺口",
+      "slug": "/blog/api7-3.10.7-client-upstream-trust",
+      "published_at": "2026-09-22",
+      "tags": [
+        "API7 网关",
+        "API 安全",
+        "身份认证",
+        "TLS"
+      ],
+      "url": "https://www.apiseven.com/blog/api7-3.10.7-client-upstream-trust"
+    },
+    {
+      "title": "API7 网关 3.10.7：用证据降低升级不确定性",
+      "slug": "/blog/api7-3.10.7-upgrade-evidence",
+      "published_at": "2026-09-15",
+      "tags": [
+        "API7 网关",
+        "API 网关升级",
+        "可观测性",
+        "API 管理"
+      ],
+      "url": "https://www.apiseven.com/blog/api7-3.10.7-upgrade-evidence"
+    },
+    {
+      "title": "API7 网关 3.10.6：按查询成本治理 GraphQL",
+      "slug": "/blog/api7-3.10.6-graphql-cost-governance",
+      "published_at": "2026-09-08",
+      "tags": [
+        "API7 网关",
+        "GraphQL",
+        "限流",
+        "API 治理"
+      ],
+      "url": "https://www.apiseven.com/blog/api7-3.10.6-graphql-cost-governance"
+    },
+    {
+      "title": "AISIX 1.0.0 发布：让 AI 安全规则可测试，决策有依据",
+      "slug": "/blog/aisix-1-0-0-measurable-ai-guardrails",
+      "published_at": "2026-09-07",
+      "tags": [
+        "AISIX",
+        "AI 网关",
+        "AI 安全防护"
+      ],
+      "url": "https://www.apiseven.com/blog/aisix-1-0-0-measurable-ai-guardrails"
+    },
+    {
+      "title": "API7 网关 3.10.6：缩小自定义插件发布的影响范围",
+      "slug": "/blog/api7-3.10.6-custom-plugin-blast-radius",
+      "published_at": "2026-09-02",
+      "tags": [
+        "API7 网关",
+        "API 网关",
+        "自定义插件",
+        "API 管理"
+      ],
+      "url": "https://www.apiseven.com/blog/api7-3.10.6-custom-plugin-blast-radius"
+    }
+  ],
+  "higress_site_commits": [],
+  "higress_plugins": [
+    {
+      "sha": "22975c8",
+      "date": "2026-10-04T04:50:13Z",
+      "author": "澄潭",
+      "message": "chore(release): promote mcp-server 2.0.3 to stable for 2.2.5 (#4967)",
+      "plugin": "release",
+      "url": "https://github.com/higress-group/higress/commit/22975c83b858ee392e4dd912b8f47dd4dcc1128f"
+    },
+    {
+      "sha": "dad155c",
+      "date": "2026-10-02T11:11:39Z",
+      "author": "澄潭",
+      "message": "refactor(plugins): retire simple-jwt-auth to wasm-go examples (#4920)",
+      "plugin": "plugins",
+      "url": "https://github.com/higress-group/higress/commit/dad155c66d849da068dfc7004f412364aac785a0"
+    },
+    {
+      "sha": "ddbaea0",
+      "date": "2026-09-29T13:43:59Z",
+      "author": "澄潭",
+      "message": "fix(mcp-session): write back assembled SSE fragments when path rewrite is disabled (#4878)",
+      "plugin": "mcp-session",
+      "url": "https://github.com/higress-group/higress/commit/ddbaea08fee3c0a6f78efdf4a0d207632c818776"
+    },
+    {
+      "sha": "943b31b",
+      "date": "2026-09-29T10:53:00Z",
+      "author": "cyberslack_lee",
+      "message": "fix main.go bug( no command-ok) (#4644)",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/943b31bc3c012d5c845c6b6e14246f813d0c6927"
+    },
+    {
+      "sha": "ef1a57b",
+      "date": "2026-09-29T10:52:48Z",
+      "author": "Srikanth Patchava",
+      "message": "fix(ai-statistics): make request body buffer limit configurable (#4282)",
+      "plugin": "ai-statistics",
+      "url": "https://github.com/higress-group/higress/commit/ef1a57b128270bceca045ca55a7224bd248c8098"
+    },
+    {
+      "sha": "99aaa5d",
+      "date": "2026-09-29T10:08:47Z",
+      "author": "0",
+      "message": "fix(ai-proxy): detect hunyuan embeddings API paths (#4220)",
+      "plugin": "ai-proxy",
+      "url": "https://github.com/higress-group/higress/commit/99aaa5d2d81b48bf427c955146f4fd69d8a2fa18"
+    },
+    {
+      "sha": "38ac299",
+      "date": "2026-09-29T08:46:58Z",
+      "author": "澄潭",
+      "message": "docs: clarify allowTools is route-scoped (#4854)",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/38ac29958474ba06549d96d76988b9fbdc0098ad"
+    },
+    {
+      "sha": "37b20cb",
+      "date": "2026-09-29T08:46:38Z",
+      "author": "澄潭",
+      "message": "fix: require authentication for RAG MCP server write path (#4853)",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/37b20cb1a4f67349b8fb6f06011872111efe9ac1"
+    },
+    {
+      "sha": "0a8ae29",
+      "date": "2026-09-29T08:46:18Z",
+      "author": "澄潭",
+      "message": "refactor: migrate deprecated wrapper.HasRequestBody() to ctx.HasRequestBody() (#4852)",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/0a8ae29f191e0673ab25f9d1fe09d80d4aeb64b3"
+    },
+    {
+      "sha": "a3714ff",
+      "date": "2026-09-29T06:30:44Z",
+      "author": "澄潭",
+      "message": "fix: replace instead of append X-Mse-Consumer consumer identity header (#4855)",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/a3714ff53fa20a9f83473c21b06aebd576f0abf7"
+    },
+    {
+      "sha": "9644191",
+      "date": "2026-09-29T06:29:53Z",
+      "author": "澄潭",
+      "message": "fix: query-safe path joining for ext-auth envoy mode and ai-proxy basePath (#4833)",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/964419155c4fee45b2e7d42ee1b7e1aeec57ce06"
+    },
+    {
+      "sha": "b7fb876",
+      "date": "2026-09-29T02:45:26Z",
+      "author": "澄潭",
+      "message": "fix: hmac-auth-apisix fails closed for attached rules with empty allow list (#4835)",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/b7fb87625b9c426bf285c558ad0a72c45c7135f7"
+    },
+    {
+      "sha": "b44d4f7",
+      "date": "2026-09-28T08:55:27Z",
+      "author": "JianweiWang",
+      "message": "fix(ai-data-masking): avoid CPU stalls in hash restore",
+      "plugin": "ai-data-masking",
+      "url": "https://github.com/higress-group/higress/commit/b44d4f77011ad7f63c2fefef5b8cd2dec0cff1c6"
+    },
+    {
+      "sha": "27e63da",
+      "date": "2026-09-28T08:55:22Z",
+      "author": "liyian",
+      "message": "bugfix: extract model from gemini streaming path with query string",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/27e63da811ba0f3e0298e41ff72d69157cff844e"
+    },
+    {
+      "sha": "c86cbf1",
+      "date": "2026-09-28T08:55:16Z",
+      "author": "Heracles",
+      "message": "fix(mcp-session): avoid buffering request body for plain proxying",
+      "plugin": "mcp-session",
+      "url": "https://github.com/higress-group/higress/commit/c86cbf1a026a91df67252d23ff10032225bc654d"
+    },
+    {
+      "sha": "011e12a",
+      "date": "2026-09-28T08:55:10Z",
+      "author": "messere",
+      "message": "fix(ai-cache): validate Elasticsearch source fields",
+      "plugin": "ai-cache",
+      "url": "https://github.com/higress-group/higress/commit/011e12a5c8b4b03054b5bd9fb86b6b9649f781e4"
+    },
+    {
+      "sha": "885b032",
+      "date": "2026-09-28T08:54:59Z",
+      "author": "btlqql",
+      "message": "fix(mcp-server): guard config Merge type assertions",
+      "plugin": "mcp-server",
+      "url": "https://github.com/higress-group/higress/commit/885b0326ebded8982fa66f1c1b133b27b80051b6"
+    },
+    {
+      "sha": "69d3225",
+      "date": "2026-09-28T08:54:53Z",
+      "author": "btlqql",
+      "message": "fix(mcp-session): guard config Merge type assertions",
+      "plugin": "mcp-session",
+      "url": "https://github.com/higress-group/higress/commit/69d322520cf150610e54a77e64734a3c174f7e84"
+    },
+    {
+      "sha": "d0289da",
+      "date": "2026-09-28T08:54:48Z",
+      "author": "yyqdbngt",
+      "message": "fix(mcp-server): avoid panic on non-string serviceMatcher values",
+      "plugin": "mcp-server",
+      "url": "https://github.com/higress-group/higress/commit/d0289dabd9731883a090aba1152ce034723a8aa7"
+    },
+    {
+      "sha": "7b275a1",
+      "date": "2026-09-28T08:54:42Z",
+      "author": "Rui",
+      "message": "fix(ai-proxy): preserve Gemini function calls",
+      "plugin": "ai-proxy",
+      "url": "https://github.com/higress-group/higress/commit/7b275a1e10d5192231a32530f77342f926fa316f"
+    },
+    {
+      "sha": "d6dbc46",
+      "date": "2026-09-28T08:54:37Z",
+      "author": "Rui",
+      "message": "fix(mcp-server): select from all registry instances",
+      "plugin": "mcp-server",
+      "url": "https://github.com/higress-group/higress/commit/d6dbc4670890ed27b6da734d9089482234c1c701"
+    },
+    {
+      "sha": "14d3aba",
+      "date": "2026-09-28T08:54:31Z",
+      "author": "Rui",
+      "message": "fix: deduct AI quota for non-streaming responses",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/14d3abade6461d9008251460e309b16e2a356804"
+    },
+    {
+      "sha": "12f1251",
+      "date": "2026-09-28T08:54:21Z",
+      "author": "Zichen Wang",
+      "message": "bugfix: fix type safety bugs in RAG MCP server (topk type assertion, Scores bounds check, nil vector guard)",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/12f12512e11b3b4491b4de612ac8c7602314ac70"
+    },
+    {
+      "sha": "e3dd3d9",
+      "date": "2026-09-28T08:54:15Z",
+      "author": "Zichen Wang",
+      "message": "bugfix: fix nil server and naked type assertions in tool-search MCP server",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/e3dd3d92aa5417aa0f08d11b07a7750f8255cb38"
+    },
+    {
+      "sha": "cbdc099",
+      "date": "2026-09-28T08:54:03Z",
+      "author": "Zichen Wang",
+      "message": "bugfix: fix nil pointer panic when redis is not configured in mcp-session",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/cbdc099a37f051720f7b9f0f2255c3a00c63802d"
+    },
+    {
+      "sha": "cb997b5",
+      "date": "2026-09-28T08:53:57Z",
+      "author": "Zichen Wang",
+      "message": "bugfix: replace FixedQueue with time-based SlidingWindow in ai-load-balancer endpoint_metrics",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/cb997b568096852d9b7465f71ec308acae83d99e"
+    },
+    {
+      "sha": "bbd9e17",
+      "date": "2026-09-28T08:53:48Z",
+      "author": "Zichen Wang",
+      "message": "bugfix: fix nil pointer panic in ai-security-guard type assertions",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/bbd9e17a4c8ea85062afaf01f91cb04124ff7903"
+    },
+    {
+      "sha": "5cca778",
+      "date": "2026-09-28T07:54:58Z",
+      "author": "Loyal-Young",
+      "message": "docs(ai-proxy): fix language typo in example",
+      "plugin": "ai-proxy",
+      "url": "https://github.com/higress-group/higress/commit/5cca778d69c06baeae9cfc74df0e8377a29f7cac"
+    },
+    {
+      "sha": "6e126f1",
+      "date": "2026-09-28T07:54:52Z",
+      "author": "Loyal-Young",
+      "message": "docs(ai-token-ratelimit): fix Qwen spelling",
+      "plugin": "ai-token-ratelimit",
+      "url": "https://github.com/higress-group/higress/commit/6e126f1517738244c9fc57edaeac2abbc59516a9"
+    },
+    {
+      "sha": "e9bbf77",
+      "date": "2026-09-28T07:54:47Z",
+      "author": "Loyal-Young",
+      "message": "docs(traffic-tag): fix viewer typo in README",
+      "plugin": "traffic-tag",
+      "url": "https://github.com/higress-group/higress/commit/e9bbf771e1308534580d93469e0d4da49d322417"
+    },
+    {
+      "sha": "4a010d1",
+      "date": "2026-09-28T07:54:42Z",
+      "author": "Loyal-Young",
+      "message": "docs(custom-response): correct README keyword typo",
+      "plugin": "custom-response",
+      "url": "https://github.com/higress-group/higress/commit/4a010d1fe31a71c2716d41f74288cebc15f7a739"
+    },
+    {
+      "sha": "6eab299",
+      "date": "2026-09-28T07:34:38Z",
+      "author": "ruiqi mao",
+      "message": "fix(frontend-gray): handle 404 fallback without Content-Type (#4743)",
+      "plugin": "frontend-gray",
+      "url": "https://github.com/higress-group/higress/commit/6eab299702f410a724a8bcb06139225041db74e2"
+    },
+    {
+      "sha": "4b63249",
+      "date": "2026-09-28T03:54:20Z",
+      "author": "halaxy",
+      "message": "docs: update remaining alibaba/higress links to higress-group",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/4b63249233d578ce2a755436389b05c700e2dc64"
+    },
+    {
+      "sha": "12dcef3",
+      "date": "2026-09-28T03:54:12Z",
+      "author": "halaxy",
+      "message": "docs: fix duplicated Chinese character in plugin READMEs",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/12dcef340571927fd0580219640eb10f83410c81"
+    },
+    {
+      "sha": "c752caf",
+      "date": "2026-09-28T03:54:06Z",
+      "author": "halaxy",
+      "message": "docs: fix duplicated Chinese particle in mcp-stock-history-data",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/c752caf13962dc65e12a6f8ed1ae5735514e8be8"
+    },
+    {
+      "sha": "09ea164",
+      "date": "2026-09-28T03:53:55Z",
+      "author": "halaxy",
+      "message": "docs: fix duplicated article in http_util.h comment",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/09ea164721867d3eaa2913d68c287113e864814c"
+    },
+    {
+      "sha": "70eb5a2",
+      "date": "2026-09-28T03:53:38Z",
+      "author": "halaxy",
+      "message": "docs: fix spelling errors in ai-search guide prompt text",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/70eb5a22bc093d558c5a7ea3f84ea19129698a07"
+    },
+    {
+      "sha": "6befec2",
+      "date": "2026-09-28T03:53:33Z",
+      "author": "halaxy",
+      "message": "docs: fix failded typo in ai-history log message",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/6befec27e10d88a5ceff8161fcfe476f1e3e6a23"
+    },
+    {
+      "sha": "13efa65",
+      "date": "2026-09-28T03:53:28Z",
+      "author": "halaxy",
+      "message": "docs: use block_regexp_urls in request_block regex example",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/13efa65b4622cd206e8a505da6ac1cc4dc9835d6"
+    },
+    {
+      "sha": "2e04474",
+      "date": "2026-09-28T03:51:46Z",
+      "author": "halaxy",
+      "message": "docs: fix concurrent query count in ai-search README example (#4765)",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/2e0447420b58663211dbaf1c4c3eb2c8b4ee44e8"
+    },
+    {
+      "sha": "22368f1",
+      "date": "2026-09-25T01:57:02Z",
+      "author": "sunxia0",
+      "message": "feat: add opt-in auto protocol strategy to mcp-server (#4685)",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/22368f1e7a284ded69607334ba08fbb5d2a7ee5e"
+    },
+    {
+      "sha": "e86e9e9",
+      "date": "2026-09-24T09:14:02Z",
+      "author": "Rui",
+      "message": "fix(response-cache): pause header-key requests until cache lookup completes (#4757)",
+      "plugin": "response-cache",
+      "url": "https://github.com/higress-group/higress/commit/e86e9e9a3dc75093c7308fe74a034ce1d3c8da14"
+    },
+    {
+      "sha": "dbdc0cb",
+      "date": "2026-09-24T08:34:07Z",
+      "author": "halaxy",
+      "message": "docs: fix example.com misspelled as exmaple.com (#4701)",
+      "plugin": "(release-automation)",
+      "url": "https://github.com/higress-group/higress/commit/dbdc0cbe3cead8b501457c10b2b0961d6d4a8003"
+    }
+  ],
+  "apisix_plugins": {
+    "commits": [
+      {
+        "sha": "2ee8dfa",
+        "date": "2026-10-08T05:58:11Z",
+        "author": "AlinsRan",
+        "message": "feat(prometheus): add service and service_id to the stream metrics (#13992)",
+        "plugin": "prometheus",
+        "url": "https://github.com/apache/apisix/commit/2ee8dfa810b03da1972b88e024f46c61b1e1716e"
+      },
+      {
+        "sha": "c6b2adc",
+        "date": "2026-09-28T08:15:37Z",
+        "author": "Shreemaan Abhishek",
+        "message": "feat(ai-rate-limiting): expose nested usage fields to cost_expr (#13984)",
+        "plugin": "ai-rate-limiting",
+        "url": "https://github.com/apache/apisix/commit/c6b2adc32ed358ee68c83b91de21d951b9c000a0"
+      }
+    ],
+    "new_plugins": [
+      {
+        "name": "openapi-to-mcp",
+        "tag": "3.19.0",
+        "source": "changelog:3.19.0",
+        "detail": "feat: add the `openapi-to-mcp` plugin, serving an HTTP API to MCP clients from its OpenAPI document over Streamable HTTP and HTTP+SSE [#13942](https://github.com/apache/apisix/pull/13942)"
+      },
+      {
+        "name": "websocket-proxy",
+        "tag": "3.19.0",
+        "source": "changelog:3.19.0",
+        "detail": "feat(websocket): add the `websocket-proxy` plugin to customize proxy behaviors, starting with `client_max_payload_len` / `upstream_max_payload_len` for `ws`/`wss` upstreams [#13972](https://github.com/apache/apisix/pull/13972)"
+      }
+    ]
+  }
+}
