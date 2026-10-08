@@ -79,6 +79,7 @@ _数据源：API7 博客、Higress 官网、Higress 仓库、Apache APISIX 仓�
 
 ## 🛠 数据源 & 复现
 
-- 抓取脚本：`scripts/fetch_data.py`（依赖 `gh` CLI 已登录）
-- 渲染脚本：`scripts/render_report.py`
+- 抓取脚本：`python3 -m gateway_ecosystem_report`
+- 渲染脚本：`python3 -m gateway_ecosystem_report render <data.json>`
 - 窗口默认 14 天，可用 `--days` 调整；可用 `--date YYYY-MM-DD` 锁定基准日
+- 完整说明见 [`AGENTS.md`](AGENTS.md)

@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "organization": "wssaidong",
+  "date": "October 2026",
+  "abstract": "Weekly Chinese digest of API/AI gateway ecosystem activity over the last 14 days. Aggregates the API7 / AISIX blog, the Higress 官网 blog, Higress plugin commits, and Apache APISIX plugin commits + CHANGELOG announcements into one Markdown report.",
+  "references": [
+    "https://www.apiseven.com/blog",
+    "https://higress-group.github.io",
+    "https://github.com/higress-group/higress",
+    "https://github.com/apache/apisix",
+    "https://agentskills.io/specification",
+    "https://www.skills.sh/"
+  ]
+}

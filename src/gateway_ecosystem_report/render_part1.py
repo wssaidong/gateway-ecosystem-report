@@ -1,14 +1,18 @@
-#!/usr/bin/env python3
-"""Render a fetched-data JSON to a Markdown ecosystem report (Chinese)."""
+"""Markdown renderer for the fetched data.
+
+The renderer is a pure function: take the JSON dict, return a Markdown
+string. Section structure is fixed; each section is robust to missing
+keys (treat them as empty, not errors).
+"""
 from __future__ import annotations
-import argparse, json, sys
-from pathlib import Path
+from collections import Counter
+
 
 W = "# 🌐 API/AI 网关生态周报\n\n"
 W += "_数据源：API7 博客、Higress 官网、Higress 仓库、Apache APISIX 仓库；窗口 = 近 {days} 天（截至 {date}）。_\n\n"
 
 
-def section_apiseven(arts, recent, top):
+def section_apiseven(arts: list, recent: list, top: int) -> str:
     out = ["## 1️⃣ API7 / Apache APISIX 博客\n"]
     if not arts:
         out.append(
@@ -19,21 +23,25 @@ def section_apiseven(arts, recent, top):
             out.append("> 窗口外最近 5 篇（供参考，可能仍在传播）：\n")
             for a in recent:
                 tags = " · ".join(a.get("tags", [])[:4])
-                out.append(f"> - **{a['published_at']}** · [{a['title']}]({a['url']})"
-                           + (f"  \n>   _{tags}_" if tags else ""))
+                out.append(
+                    f"> - **{a['published_at']}** · [{a['title']}]({a['url']})"
+                    + (f"  \n>   _{tags}_" if tags else "")
+                )
             out.append(">")
             out.append("> 用 `--days 21` 可把 9-22 这篇纳入严格窗口。\n")
     else:
         out.append(f"窗口内共 **{len(arts)}** 篇：\n")
         for a in arts[:top]:
             tags = " · ".join(a.get("tags", [])[:4])
-            out.append(f"- **{a['published_at']}** · [{a['title']}]({a['url']})"
-                       + (f"  \n  _{tags}_" if tags else ""))
+            out.append(
+                f"- **{a['published_at']}** · [{a['title']}]({a['url']})"
+                + (f"  \n  _{tags}_" if tags else "")
+            )
         out.append("")
     return "\n".join(out)
 
 
-def section_higress_site(commits, top):
+def section_higress_site(commits: list, top: int) -> str:
     out = ["## 2️⃣ Higress 官网博客 (`higress-group.github.io`)\n"]
     if not commits:
         out.append(
@@ -44,8 +52,10 @@ def section_higress_site(commits, top):
     else:
         out.append(f"共 **{len(commits)}** 个提交：\n")
         for c in commits[:top]:
-            out.append(f"- `{c['date'][:10]}` · {c['author']} · "
-                       f"{c['message']} ([{c['sha']}]({c['url']}))")
+            out.append(
+                f"- `{c['date'][:10]}` · {c['author']} · "
+                f"{c['message']} ([{c['sha']}]({c['url']}))"
+            )
         out.append("")
     out.append(
         "> 注：官网默认分支是 `ai`，不是 `main`；"

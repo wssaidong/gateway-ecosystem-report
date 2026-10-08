@@ -1,28 +1,115 @@
 ---
 name: gateway-ecosystem-report
-description: 抓取 API/AI 网关生态近 2 周信号并生成中文报告。覆盖 API7 博客、Higress 官网博客与插件仓库、Apache APISIX 插件仓库。当用户要求生成"网关生态周报"、"API 网关生态动态"、"Higress/APISIX 最新进展"时调用。
+description: 抓取 API/AI 网关生态 2 周动态生成中文周报。覆盖 API7/AISIX、Higress、APISIX.
+license: MIT
+metadata:
+  author: wssaidong
+  version: "1.0.0"
+  argument-hint: [days=14]
+compatibility: Requires `gh` CLI authenticated, Python 3.9+, network access to api.github.com and www.apiseven.com.
 ---
 
 # Gateway Ecosystem Report
 
-把"近 2 周"作为硬性窗口（默认 = 当天 - 14 天）。数据源全部走 GitHub API（`gh api`，api.github.com 在受限网络下通常可用），不要 `git clone`，也不要直接 `curl github.com`。
+Generate a Chinese weekly digest of activity in the API/AI gateway ecosystem
+over the last 14 days. Covers the four high-signal sources for the open-source
+gateways that ship most of the world's API traffic.
 
-## 4 个数据源
+## When to Use
 
-1. **API7 / Apache APISIX 博客** — `curl -sL https://www.apiseven.com/blog`，从嵌入的 `__NEXT_DATA__` JSON 中提取 `articles[]`，按 `published_at` 过滤近 2 周。
-2. **Higress 官网** — `gh api repos/higress-group/higress-group.github.io/commits?path=src/content/blog&since=<14d_ago>&sha=ai&per_page=100`，拿到 `src/content/blog` 路径下的近 2 周提交（默认分支是 `ai`，不是 `main`）。
-3. **Higress 插件** — `gh api repos/higress-group/higress/commits?path=plugins&since=<14d_ago>&per_page=100`；从提交信息里识别 `feat(<plugin>):` / `fix(<plugin>):` / 新插件名（`mcp-server`、`ai-endpoint-picker`、`ai-load-balancer` 等）。
-4. **Apache APISIX 插件** — `gh api repos/apache/apisix/commits?path=apisix/plugins&since=<14d_ago>&per_page=100`；新插件名 = changelog 里 `### Plugins` 段下 `feat: add the <name> plugin` 的条目；额外扫 `apisix/plugins/` 目录确认是否多出新子目录。
+Activate this skill when the user asks for any of:
 
-## 关键陷阱
+- "API/AI 网关周报" / "API 网关生态周报" / "网关最近动态"
+- "Higress 插件最近更新了啥" / "APISIX 新插件"
+- "API7 / AISIX 最新博客" / "网关生态动态"
+- A weekly ecosystem status report on these four projects
 
-- **higress-group.github.io 默认分支是 `ai`**，不是 `main` — 走 `contents` API 时必须带 `?ref=ai`，否则 404。
-- **higress-group.github.io 没有公开发新文章**的时候也会有提交 — 必须看 `path=src/content/blog` 而不是仓库根。
-- **apisix 多数 commit 是 bug fix**，新插件只出现在 minor/major release 的 `CHANGELOG.md` 里。同步拉 `https://raw.githubusercontent.com/apache/apisix/master/CHANGELOG.md` 抓 `## X.Y.Z` 段下 `### Plugins` 子节里的 `feat: add the <plugin> plugin`。
-- **`aisix` vs `apisix`** — API7 的新 AI 网关产品叫 **AISIX**（不是 APISIX），按文章标题区分。
-- **GitHub API 速率** — 5000/小时，auth 后的 `gh api` 默认共享用户配额，足够用。
-- **apiseven 博客列表用 next 静态导出**，HTML 里 `__NEXT_DATA__` 包含完整 `articles[]`，不要再调列表 API。
+Do NOT activate for: deploying these gateways, configuring individual plugins,
+performance tuning, or comparing gateway features. Those have their own skills.
 
-## 输出
+## Data Sources
 
-调用方负责渲染 Markdown 报告；本 skill 提供 `scripts/fetch_data.py`（抓数据 → JSON）和 `scripts/render_report.py`（JSON → Markdown）两个可执行入口。
+| # | Source | Path / URL | Window default |
+|---|--------|-----------|----------------|
+| 1 | API7 / Apache APISIX blog | `https://www.apiseven.com/blog` | 14 days |
+| 2 | Higress 官网博客 | `https://higress-group.github.io` (`ai` branch, `src/content/blog`) | 14 days |
+| 3 | Higress 插件 | `https://github.com/higress-group/higress` (path `plugins/`) | 14 days |
+| 4 | Apache APISIX 插件 | `https://github.com/apache/apisix` (path `apisix/plugins/` + `CHANGELOG.md`) | 14 days |
+
+For a full reference on the API endpoints, common pitfalls, and the parsing
+details for each source, see [`AGENTS.md`](AGENTS.md).
+
+## How to Use
+
+### One-shot via the bundled CLI
+
+```bash
+# from the skill repo root
+python3 -m gateway_ecosystem_report \
+    --days 14 \
+    --out reports/$(date +%F)-data.json
+
+python3 -m gateway_ecosystem_report render \
+    reports/$(date +%F)-data.json \
+    --top 12 > reports/$(date +%F)-ecosystem.md
+```
+
+### Step by step (when the user wants to read along)
+
+1. **Fetch** data for the 4 sources into one JSON file.
+2. **Render** the JSON to a Chinese Markdown report.
+3. **Surface** the report to the user; offer to widen `--days` if every section
+   is empty (very common for the Higress site blog, which ships no new content
+   for weeks at a time).
+
+### Programmatic (when called from another agent)
+
+```python
+from gateway_ecosystem_report import build_report
+
+md = build_report(days=14, top=10)
+print(md)
+```
+
+## Report Shape
+
+The Markdown report always has four sections, in this order:
+
+1. **API7 / Apache APISIX 博客** — recent articles (or "edge of window"
+   context if the strict window is empty).
+2. **Higress 官网博客** — `src/content/blog/` commits on `ai` branch.
+3. **Higress 插件** — commits under `plugins/`, grouped by plugin name.
+4. **Apache APISIX 插件** — `apisix/plugins/` commits plus newly announced
+   plugins from `CHANGELOG.md`.
+
+If any section is empty, the report still emits the section header and an
+explanation pointing at the next action the user can take (widen the window,
+check the upstream release notes, etc.).
+
+## Common Edge Cases
+
+- **APISIX 多数 commit 是 bug fix** — 14 天内"新增插件"几乎不会出现。要查"上
+  一个 release 引入了什么新插件"，用 `CHANGELOG.md` 的 `### Plugins` 段。
+- **Higress 官网博客窗口内可能为零** — 站点 Astro 在 `ai` 分支维护，文章
+  发布节奏稀疏。新的功能内容在 `higress-group/higress` 的 `release-notes/` 下。
+- **`api.github.com` 是绕过直连墙的关键** — 在受限网络里，`curl github.com`
+  不通但 `gh api`（走 api.github.com）通；git push 走 SSH（22 端口）通。
+- **API7 的 AI 网关产品叫 AISIX** — 不是 APISIX；博客站
+  `https://www.apiseven.com/blog` 同时承载 API7 网关和 AISIX 两条产品线的文章。
+- **apiseven 博客列表用 next.js 静态导出** — HTML 嵌入的 `__NEXT_DATA__` JSON
+  是唯一可信源；不要再调列表 API（404）。列表 key 是 `pageProps.list`（旧版
+  `pageProps.articles`），块尾是 `}]},"__N_SSG":`。
+- **higress-group.github.io 默认分支是 `ai`** — 不是 `main`；API `contents`
+  调用必须 `?ref=ai`，否则 404。
+
+## Output Contract
+
+- `data.json` is a stable JSON schema (see `AGENTS.md` § "Data Schema").
+- `ecosystem.md` is valid GFM using only headers, lists, and code blocks.
+- The CLI is idempotent: re-running on the same day overwrites the same file
+  paths.
+
+## Full Reference
+
+For API endpoint details, the data schema, and the complete edge-case list,
+see [`AGENTS.md`](AGENTS.md).
