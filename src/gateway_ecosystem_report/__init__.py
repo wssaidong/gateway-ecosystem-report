@@ -1,8 +1,9 @@
 """gateway_ecosystem_report — API/AI gateway ecosystem weekly digest.
 
 Fetches the last N days of activity from the API7 blog, the Higress site,
-Higress plugin commits, and the APISIX plugin commits + CHANGELOG, then
-renders a Chinese Markdown report.
+Higress plugin commits, the APISIX plugin commits + CHANGELOG, and the
+Kong Gateway repo (动向 / 提交 / 版本), then renders a Chinese Markdown
+report.
 
 Use as a CLI:
 
@@ -19,6 +20,7 @@ from .fetchers_apiseven import fetch_apiseven_blog
 from .fetchers_higress_site import fetch_higress_site_commits
 from .fetchers_higress_plugins import fetch_higress_plugins
 from .fetchers_apisix import fetch_apisix_plugins
+from .fetchers_kong import fetch_kong
 
 __all__ = [
     "main",
@@ -27,6 +29,7 @@ __all__ = [
     "fetch_higress_site_commits",
     "fetch_higress_plugins",
     "fetch_apisix_plugins",
+    "fetch_kong",
 ]
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"

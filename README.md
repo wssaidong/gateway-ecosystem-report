@@ -6,7 +6,8 @@
 
 A Chinese weekly digest of the API/AI gateway ecosystem. Pulls the last 14 days
 from the API7 / AISIX blog, the Higress site, the Higress plugin repository,
-and the Apache APISIX plugin repository, then renders a single Markdown report.
+the Apache APISIX plugin repository, and the Kong Gateway repository, then
+renders a single Markdown report.
 
 ## Install
 
@@ -31,6 +32,7 @@ and 70+ other agents (see the [skills.sh agent list](https://www.skills.sh/)).
 | [Higress 官网博客](https://higress-group.github.io) (`ai` branch) | new entries under `src/content/blog/` |
 | [Higress 插件仓库](https://github.com/higress-group/higress) | commits under `plugins/` |
 | [Apache APISIX 仓库](https://github.com/apache/apisix) | commits under `apisix/plugins/` + new plugins announced in `CHANGELOG.md` |
+| [Kong Gateway 仓库](https://github.com/Kong/kong) | repo direction (metadata + commits + `changelog/unreleased/`), commit digest, per-version `CHANGELOG.md` highlights |
 
 ## Quickstart (CLI)
 
@@ -64,7 +66,7 @@ print(md)
 ```markdown
 # 🌐 API/AI 网关生态周报
 
-_数据源：API7 博客、Higress 官网、Higress 仓库、Apache APISIX 仓库；窗口 = 近 14 天（截至 2026-10-08）。_
+_数据源：API7 博客、Higress 官网、Higress 仓库、Apache APISIX 仓库、Kong Gateway 仓库；窗口 = 近 14 天（截至 2026-10-08）。_
 
 ## 1️⃣ API7 / Apache APISIX 博客
 …
@@ -81,6 +83,10 @@ _数据源：API7 博客、Higress 官网、Higress 仓库、Apache APISIX 仓�
 ### 🆕 新增插件（来自 CHANGELOG/release notes）
 - openapi-to-mcp (in 3.19.0, changelog:3.19.0)
 - websocket-proxy (in 3.19.0, changelog:3.19.0)
+## 5️⃣ Kong Gateway (Kong/kong)
+### 项目动向
+- ⭐ 44,340 · open issues 225 · 默认分支 `master` · 最近推送 `2026-10-19`
+- 下一版本待发布 changelog 条目：2 个（changelog/unreleased/）
 ```
 
 ## Repository layout
@@ -102,7 +108,7 @@ gateway-ecosystem-report/
 │   ├── gh.py                 # `gh api` wrapper
 │   ├── fetchers_*.py         # one file per data source
 │   ├── render_part1.py       # apiseven + higress-site sections
-│   ├── render_part2.py       # plugin sections
+│   ├── render_part2.py       # plugin + Kong sections
 │   └── py.typed
 ├── tests/
 │   ├── test_patterns.py      # regex unit tests (stdlib)

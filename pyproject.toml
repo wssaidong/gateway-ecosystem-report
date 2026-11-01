@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gateway-ecosystem-report"
-version = "1.0.0"
+version = "1.1.0"
 description = "Weekly Chinese digest of API/AI gateway ecosystem activity."
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -12,7 +12,7 @@ requires-python = ">=3.9"
 authors = [
     {name = "wssaidong", email = "shaodongca@gmail.com"},
 ]
-keywords = ["api-gateway", "apisix", "higress", "ecosystem", "weekly-digest"]
+keywords = ["api-gateway", "apisix", "higress", "kong", "ecosystem", "weekly-digest"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",

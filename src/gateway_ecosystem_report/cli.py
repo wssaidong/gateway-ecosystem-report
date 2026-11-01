@@ -16,10 +16,12 @@ from .fetchers_apiseven import fetch_apiseven_blog
 from .fetchers_higress_site import fetch_higress_site_commits
 from .fetchers_higress_plugins import fetch_higress_plugins
 from .fetchers_apisix import fetch_apisix_plugins
+from .fetchers_kong import fetch_kong
 from .render_part1 import W, section_apiseven, section_higress_site
 from .render_part2 import (
     section_higress_plugins,
     section_apisix_plugins,
+    section_kong,
     footer,
 )
 
@@ -40,6 +42,7 @@ def _fetch(args: argparse.Namespace) -> int:
         "higress_site_commits": fetch_higress_site_commits(args.days, today),
         "higress_plugins": fetch_higress_plugins(args.days, today),
         "apisix_plugins": fetch_apisix_plugins(args.days, today),
+        "kong": fetch_kong(args.days, today),
     }
 
     out_path = Path(args.out)
@@ -56,6 +59,9 @@ def _fetch(args: argparse.Namespace) -> int:
           f"{len(payload['apisix_plugins']['commits'])}", file=sys.stderr)
     print(f"  apisix new plugins: "
           f"{len(payload['apisix_plugins']['new_plugins'])}", file=sys.stderr)
+    print(f"  kong commits: {len(payload['kong']['commits'])}", file=sys.stderr)
+    print(f"  kong changelog versions: "
+          f"{len(payload['kong']['changelog'])}", file=sys.stderr)
     return 0
 
 
@@ -74,6 +80,7 @@ def _render(args: argparse.Namespace) -> int:
         section_higress_site(data.get("higress_site_commits", []), args.top),
         section_higress_plugins(data.get("higress_plugins", []), args.top),
         section_apisix_plugins(data.get("apisix_plugins", {}), args.top),
+        section_kong(data.get("kong", {}), args.top),
         footer(),
     ]
     sys.stdout.write("\n".join(out))
@@ -92,6 +99,7 @@ def build_report(days: int = 14, top: int = 10,
         "higress_site_commits": fetch_higress_site_commits(days, today),
         "higress_plugins": fetch_higress_plugins(days, today),
         "apisix_plugins": fetch_apisix_plugins(days, today),
+        "kong": fetch_kong(days, today),
     }
     out = [
         W.format(days=days, date=today.isoformat()),
@@ -100,6 +108,7 @@ def build_report(days: int = 14, top: int = 10,
         section_higress_site(payload["higress_site_commits"], top),
         section_higress_plugins(payload["higress_plugins"], top),
         section_apisix_plugins(payload["apisix_plugins"], top),
+        section_kong(payload["kong"], top),
         footer(),
     ]
     return "\n".join(out)

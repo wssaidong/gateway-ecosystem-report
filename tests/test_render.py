@@ -8,7 +8,7 @@ from gateway_ecosystem_report.render_part1 import (
     section_apiseven, section_higress_site,
 )
 from gateway_ecosystem_report.render_part2 import (
-    section_higress_plugins, section_apisix_plugins, footer,
+    section_higress_plugins, section_apisix_plugins, section_kong, footer,
 )
 from gateway_ecosystem_report.cli import build_report, _fetch, _render
 
@@ -66,6 +66,45 @@ FIXTURE = {
             }
         ],
     },
+    "kong": {
+        "repo": {
+            "stars": 44340, "open_issues": 225,
+            "default_branch": "master", "pushed_at": "2026-10-19T02:45:09Z",
+        },
+        "commits": [
+            {
+                "sha": "abc0123", "date": "2026-10-19T02:44:32Z",
+                "author": "Kong CI",
+                "message": "chore(ci): migrate Docker Hub login to OIDC (#15044)",
+                "scope": "ci",
+                "url": "https://github.com/Kong/kong/commit/abc0123",
+            }
+        ],
+        "releases": [
+            {
+                "tag": "3.9.4", "published_at": "2026-10-12T07:27:48Z",
+                "url": "https://github.com/Kong/kong/releases/tag/3.9.4",
+            }
+        ],
+        "changelog": [
+            {
+                "version": "3.9.4", "date": "2026-10-12T07:27:48Z",
+                "counts": {"Fixes": 1},
+                "entries": [
+                    {
+                        "component": "Kong", "category": "Fixes",
+                        "area": "Clustering",
+                        "text": "Fixed a SQL injection in the clustering RPC "
+                                "procedure",
+                        "ref": "#15024",
+                        "ref_url": "https://github.com/Kong/kong/pull/15024",
+                    }
+                ],
+            }
+        ],
+        "unreleased_count": 2,
+        "since": "2026-10-04T00:00:00Z",
+    },
 }
 
 
@@ -117,6 +156,38 @@ class TestApisixPluginsSection(unittest.TestCase):
         self.assertIn("没有新插件", md)
 
 
+class TestKongSection(unittest.TestCase):
+    def test_renders_three_dimensions(self):
+        md = section_kong(FIXTURE["kong"], 10)
+        # 项目动向
+        self.assertIn("44,340", md)
+        self.assertIn("changelog/unreleased", md)
+        # 提交内容
+        self.assertIn("chore(ci): migrate Docker Hub login to OIDC", md)
+        self.assertIn("`ci`", md)
+        # 版本更新
+        self.assertIn("3.9.4", md)
+        self.assertIn("窗口内 ✅", md)
+        self.assertIn("[Fixes/Clustering]", md)
+        self.assertIn("#15024", md)
+
+    def test_empty_data_notes_missing_key(self):
+        md = section_kong({}, 10)
+        self.assertIn("早于 Kong 追踪", md)
+
+    def test_no_commits_still_renders_versions(self):
+        data = dict(FIXTURE["kong"], commits=[])
+        md = section_kong(data, 10)
+        self.assertIn("没有提交", md)
+        self.assertIn("3.9.4", md)
+
+    def test_no_window_release_expands_newest_as_context(self):
+        data = dict(FIXTURE["kong"], since="2026-12-01T00:00:00Z")
+        md = section_kong(data, 10)
+        self.assertIn("窗口外参考", md)
+        self.assertIn("[Fixes/Clustering]", md)
+
+
 class TestRenderEndToEnd(unittest.TestCase):
     def test_render_from_file(self):
         with tempfile.TemporaryDirectory() as td:
@@ -140,6 +211,8 @@ class TestRenderEndToEnd(unittest.TestCase):
             self.assertIn("openapi-to-mcp", out)
             self.assertIn("mcp-session", out)
             self.assertIn("API7 网关 3.10.7: example", out)
+            self.assertIn("Kong Gateway", out)
+            self.assertIn("3.9.4", out)
 
 
 if __name__ == "__main__":

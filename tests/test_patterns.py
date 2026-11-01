@@ -2,7 +2,8 @@
 import unittest
 
 from gateway_ecosystem_report.patterns import (
-    PLUGIN_RE, NEW_PLUGIN_RE, LIST_RE, ARTICLES_RE,
+    PLUGIN_RE, NEW_PLUGIN_RE, LIST_RE, ARTICLES_RE, KONG_COMMIT_RE,
+    KONG_REF_RE,
 )
 
 
@@ -66,6 +67,46 @@ class TestBlogHtmlRegexes(unittest.TestCase):
         m = ARTICLES_RE.search(html)
         self.assertIsNotNone(m)
         self.assertIn('"title":"A"', m.group(1))
+
+
+class TestKongCommitRe(unittest.TestCase):
+    def test_scope_with_slash(self):
+        m = KONG_COMMIT_RE.match("chore(ci/cd): pass correct tag (#15034)")
+        self.assertIsNotNone(m)
+        self.assertEqual(m.group(2), "ci/cd")
+
+    def test_uppercase_scope(self):
+        m = KONG_COMMIT_RE.match("docs(COPYRIGHT): update copyright (#15017)")
+        self.assertIsNotNone(m)
+        self.assertEqual(m.group(2), "COPYRIGHT")
+
+    def test_types_beyond_the_plugin_grammar(self):
+        for msg, scope in [
+            ("tests(ldap): use local AD fixtures (#15046)", "ldap"),
+            ("fix(ci): preserve runtimes (#15043)", "ci"),
+            ("chore(deps): bump openssl (#15004)", "deps"),
+        ]:
+            with self.subTest(msg=msg):
+                m = KONG_COMMIT_RE.match(msg)
+                self.assertIsNotNone(m)
+                self.assertEqual(m.group(2), scope)
+
+    def test_scope_optional(self):
+        m = KONG_COMMIT_RE.match("fix: something without a scope")
+        self.assertIsNotNone(m)
+        self.assertIsNone(m.group(2))
+
+    def test_no_match_without_colon(self):
+        self.assertIsNone(KONG_COMMIT_RE.match("Merge commit from fork"))
+        self.assertIsNone(KONG_COMMIT_RE.match("fixing stuff asap"))
+
+
+class TestKongRefRe(unittest.TestCase):
+    def test_extracts_pr_number_and_url(self):
+        m = KONG_REF_RE.search("Fixed X. [#15024](https://github.com/Kong/kong/pull/15024)")
+        self.assertIsNotNone(m)
+        self.assertEqual(m.group(1), "15024")
+        self.assertIn("pull/15024", m.group(2))
 
 
 if __name__ == "__main__":

@@ -4,6 +4,31 @@ All notable changes to this skill are documented in this file. The format is
 based on [Keep a Changelog](https://keepachangelog.com/), and this project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-11-02
+
+### Added
+
+- Kong Gateway (`Kong/kong`) as source #5, tracked at the same granularity
+  as the existing gateways across three dimensions:
+  - 项目动向 — repo metadata (stars / open issues / default branch /
+    pushed_at), whole-window commits grouped by conventional-commit scope,
+    and the `changelog/unreleased/` queue size as the next-release hint.
+  - 提交内容 — commit rows in the same shape as the other sources, with
+    `scope` instead of `plugin`.
+  - 版本更新 — latest releases plus per-version entries parsed from the
+    repo-root `CHANGELOG.md` (component / category / area / text / PR ref),
+    with in-window versions expanded and out-of-window ones summarised.
+- `fetchers_kong.py`, `section_kong` in the renderer, `KONG_COMMIT_RE` /
+  `KONG_REF_RE` in `patterns.py`, and `tests/test_kong.py` + new pattern /
+  render test cases.
+- Kong notes in `SKILL.md` edge cases, `AGENTS.md` schema / endpoints /
+  recipe / failure modes, and the README coverage table.
+
+### Fixed
+
+- Version-entry truncation no longer splits a markdown link mid-`[…](…)`
+  (the renderer cuts before an unclosed `[` instead).
+
 ## [1.0.0] - 2026-10-08
 
 ### Added
