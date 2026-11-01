@@ -51,6 +51,36 @@ The fetcher writes one JSON file with this shape:
         "detail": "feat: add the `openapi-to-mcp` plugin, serving..."
       }
     ]
+  },
+  "kong": {
+    "repo": {
+      "stars": 44340, "open_issues": 225,
+      "default_branch": "master", "pushed_at": "2026-10-19T02:45:09Z"
+    },
+    "commits": [ /* same shape as higress_site_commits, with "scope" */ ],
+    "releases": [
+      {
+        "tag": "3.9.4", "published_at": "2026-10-12T07:27:48Z",
+        "url": "https://github.com/Kong/kong/releases/tag/3.9.4"
+      }
+    ],
+    "changelog": [
+      {
+        "version": "3.9.4",
+        "date": "2026-10-12T07:27:48Z",  /* joined from the release tag */
+        "counts": {"Fixes": 1},
+        "entries": [
+          {
+            "component": "Kong", "category": "Fixes", "area": "Clustering",
+            "text": "Fixed an issue where a SQL injection…",
+            "ref": "#15024",
+            "ref_url": "https://github.com/Kong/kong/pull/15024"
+          }
+        ]
+      }
+    ],
+    "unreleased_count": 2,  /* files in changelog/unreleased/; null if fetch failed */
+    "since": "2026-10-19T00:00:00Z"
   }
 }
 ```
@@ -72,6 +102,11 @@ applies its own stored token and returns only the API response.
 | 4a | `https://api.github.com/repos/apache/apisix/commits?path=apisix/plugins&since=<ISO>&per_page=100` | path-scoped |
 | 4b | `https://api.github.com/repos/apache/apisix/releases?per_page=5` | bodies can mention new plugins |
 | 4c | `https://raw.githubusercontent.com/apache/apisix/master/CHANGELOG.md` | canonical source for new-plugin announcements |
+| 5a | `https://api.github.com/repos/Kong/kong` | repo metadata (stars / open issues / default branch) |
+| 5b | `https://api.github.com/repos/Kong/kong/commits?since=<ISO>&per_page=100` | whole repo — Kong tracks overall direction, not one path |
+| 5c | `https://api.github.com/repos/Kong/kong/releases?per_page=5` | release dates joined to changelog versions by tag |
+| 5d | `https://raw.githubusercontent.com/Kong/kong/master/CHANGELOG.md` | canonical version content (release bodies are boilerplate) |
+| 5e | `https://api.github.com/repos/Kong/kong/contents/changelog/unreleased` | next-version queue size (direction signal) |
 
 `since` is an ISO-8601 UTC timestamp `YYYY-MM-DDTHH:MM:SSZ`. The fetcher
 computes it as `today - days` at midnight UTC.
@@ -222,7 +257,65 @@ Strategy:
 4. In the renderer, the "new plugin" list always comes from step 2+3; the
    commit list is the "Top commits" supplement.
 
-### 5. The OpenAI/Anthropic helpers
+### 5. Kong Gateway
+
+Three signals, mirroring the granularity of the other gateway sources:
+
+**项目动向** — repo metadata plus the whole-repo commit list:
+
+```
+GET https://api.github.com/repos/Kong/kong
+GET https://api.github.com/repos/Kong/kong/commits?since=<ISO>&per_page=100
+GET https://api.github.com/repos/Kong/kong/contents/changelog/unreleased
+```
+
+`master` receives only a trickle of commits (CI / dependency / security
+maintenance); single-digit window counts are normal, not a fetch failure.
+The `changelog/unreleased/` file count is the "what is queued for the next
+release" hint. Commits follow conventional-commit style but with a wider
+scope grammar than the plugin sources: scopes include `ci/cd` (slash) and
+`COPYRIGHT` (uppercase), types include `tests`/`ci`/`cd`. The colon is
+required — `KONG_COMMIT_RE` deliberately does not match prose like
+"Merge commit from fork" (those security merges land in the `misc` bucket).
+
+**提交内容** — the commit rows themselves (`scope` instead of `plugin`,
+same row shape as the other sources).
+
+**版本更新** — releases plus the repo-root `CHANGELOG.md`:
+
+```
+GET https://api.github.com/repos/Kong/kong/releases?per_page=5
+GET https://raw.githubusercontent.com/Kong/kong/master/CHANGELOG.md
+```
+
+The GitHub release **body is boilerplate** (download links + a pointer at
+the release-branch changelog anchor) — never parse it for content. The
+canonical source is `CHANGELOG.md` on `master`, whose grammar is:
+
+```
+## 3.9.4
+### Kong                    ← component (Kong / Kong-Manager)
+#### Fixes                  ← category (Features / Fixes / Dependencies / …)
+##### Clustering            ← area (Core / Plugin / Admin API / …)
+- Fixed an issue where … ([CVE-…](…)).
+ [#15024](https://github.com/Kong/kong/pull/15024)   ← ref on its own line
+```
+
+Parse rules (see `fetchers_kong.parse_changelog`):
+
+1. Split on `^## (\d+\.\d+\.\d+)$`; the last version's body runs to EOF
+   and swallows the `## Previous releases` heading — cut at the next
+   `\n## `.
+2. Track `###`/`####`/`#####` as component/category/area; `- ` lines are
+   entries.
+3. A ` [#NNNN](url)` reference often sits on the **continuation line**
+   (indented, no `- `); attach it to the previous entry. Other
+   continuation lines join the entry text.
+4. Join each version's release date from the GitHub release with the same
+   tag; the renderer marks versions inside the window and expands in-window
+   versions (or the newest one, as out-of-window context, when none are).
+
+### 6. The OpenAI/Anthropic helpers
 
 The skill does not call any OpenAI / Anthropic API. All summarisation is
 done by the calling agent. This keeps the skill free of LLM cost and
@@ -240,6 +333,9 @@ deterministic — the report is the data, not an interpretation.
 | HTTP 403 from `api.github.com` | rate limit hit | wait or use a different token; auth raises limit to 5000/h |
 | HTML for `apiseven.com/blog` has no `__NEXT_DATA__` | bot protection triggered (rare) | retry with a fuller `User-Agent` and `Accept-Language: zh-CN` |
 | `gh api` 404s on the higress site | forgot `sha=ai` | the default branch is `ai`, not `main` |
+| `kong.commits` is 0 | normal — `master` is low-cadence maintenance | check `kong.changelog` and `unreleased_count` for the real signal |
+| `kong.changelog` is empty but releases exist | `raw.githubusercontent.com` unreachable | renderer falls back to listing release tags; the bodies are boilerplate by design |
+| Kong entry text ends mid-link (`[FTI-…](`) | naive 200-char truncation | the renderer's `_truncate` cuts before an unclosed `[` instead |
 
 ## Security
 

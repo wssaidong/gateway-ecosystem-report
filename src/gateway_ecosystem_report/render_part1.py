@@ -9,7 +9,7 @@ from collections import Counter
 
 
 W = "# 🌐 API/AI 网关生态周报\n\n"
-W += "_数据源：API7 博客、Higress 官网、Higress 仓库、Apache APISIX 仓库；窗口 = 近 {days} 天（截至 {date}）。_\n\n"
+W += "_数据源：API7 博客、Higress 官网、Higress 仓库、Apache APISIX 仓库、Kong Gateway 仓库；窗口 = 近 {days} 天（截至 {date}）。_\n\n"
 
 
 def section_apiseven(arts: list, recent: list, top: int) -> str:

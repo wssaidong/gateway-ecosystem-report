@@ -1,10 +1,10 @@
 ---
 name: gateway-ecosystem-report
-description: 抓取 API/AI 网关生态 2 周动态生成中文周报。覆盖 API7/AISIX、Higress、APISIX.
+description: 抓取 API/AI 网关生态 2 周动态生成中文周报。覆盖 API7/AISIX、Higress、APISIX、Kong Gateway.
 license: MIT
 metadata:
   author: wssaidong
-  version: "1.0.0"
+  version: "1.1.0"
   argument-hint: [days=14]
 compatibility: Requires `gh` CLI authenticated, Python 3.9+, network access to api.github.com and www.apiseven.com.
 ---
@@ -12,7 +12,7 @@ compatibility: Requires `gh` CLI authenticated, Python 3.9+, network access to a
 # Gateway Ecosystem Report
 
 Generate a Chinese weekly digest of activity in the API/AI gateway ecosystem
-over the last 14 days. Covers the four high-signal sources for the open-source
+over the last 14 days. Covers the five high-signal sources for the open-source
 gateways that ship most of the world's API traffic.
 
 ## When to Use
@@ -22,7 +22,8 @@ Activate this skill when the user asks for any of:
 - "API/AI 网关周报" / "API 网关生态周报" / "网关最近动态"
 - "Higress 插件最近更新了啥" / "APISIX 新插件"
 - "API7 / AISIX 最新博客" / "网关生态动态"
-- A weekly ecosystem status report on these four projects
+- "Kong Gateway 最近更新了啥" / "Kong 新版本"
+- A weekly ecosystem status report on these five projects
 
 Do NOT activate for: deploying these gateways, configuring individual plugins,
 performance tuning, or comparing gateway features. Those have their own skills.
@@ -35,6 +36,7 @@ performance tuning, or comparing gateway features. Those have their own skills.
 | 2 | Higress 官网博客 | `https://higress-group.github.io` (`ai` branch, `src/content/blog`) | 14 days |
 | 3 | Higress 插件 | `https://github.com/higress-group/higress` (path `plugins/`) | 14 days |
 | 4 | Apache APISIX 插件 | `https://github.com/apache/apisix` (path `apisix/plugins/` + `CHANGELOG.md`) | 14 days |
+| 5 | Kong Gateway | `https://github.com/Kong/kong` (whole repo + `CHANGELOG.md` + `changelog/unreleased/`) | 14 days |
 
 For a full reference on the API endpoints, common pitfalls, and the parsing
 details for each source, see [`AGENTS.md`](AGENTS.md).
@@ -56,7 +58,7 @@ python3 -m gateway_ecosystem_report render \
 
 ### Step by step (when the user wants to read along)
 
-1. **Fetch** data for the 4 sources into one JSON file.
+1. **Fetch** data for the 5 sources into one JSON file.
 2. **Render** the JSON to a Chinese Markdown report.
 3. **Surface** the report to the user; offer to widen `--days` if every section
    is empty (very common for the Higress site blog, which ships no new content
@@ -73,7 +75,7 @@ print(md)
 
 ## Report Shape
 
-The Markdown report always has four sections, in this order:
+The Markdown report always has five sections, in this order:
 
 1. **API7 / Apache APISIX 博客** — recent articles (or "edge of window"
    context if the strict window is empty).
@@ -81,6 +83,9 @@ The Markdown report always has four sections, in this order:
 3. **Higress 插件** — commits under `plugins/`, grouped by plugin name.
 4. **Apache APISIX 插件** — `apisix/plugins/` commits plus newly announced
    plugins from `CHANGELOG.md`.
+5. **Kong Gateway** — 项目动向（仓库元数据 + 全仓库提交按 scope 聚合 +
+   `changelog/unreleased/` 待发布队列）、提交内容（Top commits）、版本更新
+   （release 列表 + `CHANGELOG.md` 逐版本要点）。
 
 If any section is empty, the report still emits the section header and an
 explanation pointing at the next action the user can take (widen the window,
@@ -101,6 +106,14 @@ check the upstream release notes, etc.).
   `pageProps.articles`），块尾是 `}]},"__N_SSG":`。
 - **higress-group.github.io 默认分支是 `ai`** — 不是 `main`；API `contents`
   调用必须 `?ref=ai`，否则 404。
+- **Kong 的 release 正文是样板** — 只有下载链接和指向 release 分支
+  CHANGELOG 的锚点；版本内容解析自 `master` 根的 `CHANGELOG.md`
+  （`## 版本` → `### 组件` → `#### 类别` → `##### 子系统`）。
+- **Kong `master` 提交节奏平缓** — 窗口内提交为个位数属正常；下一版本的
+  内容先落在 `changelog/unreleased/` 目录（动向信号），发布时才合入
+  `CHANGELOG.md`。
+- **Kong 的 CHANGELOG 引用常在续行** — 条目文本下一行的缩进
+  ` [#NNNN](url)` 是 PR/issue 链接，解析器会把续行并入所属条目。
 
 ## Output Contract
 
